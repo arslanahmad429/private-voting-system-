@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}Candidate Results{% endblock %}
+{% block content %}
+<div class="container py-6">
+    <h1>{{ election.title }} - Results</h1>
+    <div class="card-glass p-6 mb-4">
+        <h2 class="h4">Your Performance</h2>
+        <p><strong>Position:</strong> #{{ candidate_position }}</p>
+        <p><strong>Votes Received:</strong> {{ candidate_result.votes }}</p>
+        <p><strong>Vote Share:</strong> {{ "%.1f"|format(candidate_result.percentage) }}%</p>
+    </div>
+    <div class="card-glass p-6">
+        <h2 class="h4">All Results</h2>
+        {% for result in results %}
+        <div class="p-3 border-bottom {% if result.candidate.candidate_id == candidacy.candidate_id %}bg-light{% endif %}">
+            <strong>{{ loop.index }}. {{ result.candidate.name }}</strong>: {{ result.votes }} votes ({{ "%.1f"|format(result.percentage) }}%)
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

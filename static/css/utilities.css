@@ -1,0 +1,589 @@
+/* ============================================
+   ADDITIONAL STYLES FOR IMPROVED LAYOUT
+   Tables, Flexbox, Spacing & Structure
+   ============================================ */
+
+/* ============================================
+   TABLE STYLES
+   ============================================ */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: var(--space-4) 0;
+}
+
+.table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 0;
+}
+
+.table thead {
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--secondary-50) 100%);
+}
+
+.table thead th {
+    padding: var(--space-4) var(--space-4);
+    text-align: left;
+    font-weight: 600;
+    font-size: var(--text-sm);
+    color: var(--gray-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-bottom: 2px solid var(--primary-200);
+    white-space: nowrap;
+}
+
+.table thead th:first-child {
+    border-top-left-radius: var(--radius-lg);
+}
+
+.table thead th:last-child {
+    border-top-right-radius: var(--radius-lg);
+}
+
+.table tbody tr {
+    transition: all var(--transition-fast);
+    border-bottom: 1px solid var(--gray-100);
+}
+
+.table tbody tr:hover {
+    background: var(--primary-50);
+    transform: scale(1.01);
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table tbody td {
+    padding: var(--space-4) var(--space-4);
+    color: var(--gray-700);
+    font-size: var(--text-sm);
+    vertical-align: middle;
+}
+
+.table tbody td:first-child {
+    font-weight: 500;
+}
+
+/* ============================================
+   FLEXBOX UTILITIES
+   ============================================ */
+.d-flex {
+    display: flex;
+}
+
+.d-inline-flex {
+    display: inline-flex;
+}
+
+.flex-row {
+    flex-direction: row;
+}
+
+.flex-column {
+    flex-direction: column;
+}
+
+.justify-content-start {
+    justify-content: flex-start;
+}
+
+.justify-content-center {
+    justify-content: center;
+}
+
+.justify-content-end {
+    justify-content: end;
+}
+
+.justify-content-between {
+    justify-content: space-between;
+}
+
+.align-items-start {
+    align-items: flex-start;
+}
+
+.align-items-center {
+    align-items: center;
+}
+
+.align-items-end {
+    align-items: flex-end;
+}
+
+.flex-wrap {
+    flex-wrap: wrap;
+}
+
+.gap-1 {
+    gap: var(--space-1);
+}
+
+.gap-2 {
+    gap: var(--space-2);
+}
+
+.gap-3 {
+    gap: var(--space-3);
+}
+
+.gap-4 {
+    gap: var(--space-4);
+}
+
+.gap-6 {
+    gap: var(--space-6);
+}
+
+/* ============================================
+   PADDING UTILITIES
+   ============================================ */
+.p-0 {
+    padding: 0;
+}
+
+.p-2 {
+    padding: var(--space-2);
+}
+
+.p-3 {
+    padding: var(--space-3);
+}
+
+.p-4 {
+    padding: var(--space-4);
+}
+
+.p-6 {
+    padding: var(--space-6);
+}
+
+.p-8 {
+    padding: var(--space-8);
+}
+
+.px-2 {
+    padding-left: var(--space-2);
+    padding-right: var(--space-2);
+}
+
+.px-4 {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+}
+
+.px-6 {
+    padding-left: var(--space-6);
+    padding-right: var(--space-6);
+}
+
+/* ============================================
+   WIDTH AND HEIGHT UTILITIES
+   ============================================ */
+.w-full {
+    width: 100%;
+}
+
+.w-auto {
+    width: auto;
+}
+
+.max-w-sm {
+    max-width: 500px;
+}
+
+.max-w-md {
+    max-width: 700px;
+}
+
+.max-w-lg {
+    max-width: 900px;
+}
+
+.max-w-xl {
+    max-width: 1100px;
+}
+
+.h-full {
+    height: 100%;
+}
+
+.h-auto {
+    height: auto;
+}
+
+/* ============================================
+   BORDER UTILITIES
+   ============================================ */
+.border {
+    border: 1px solid var(--gray-200);
+}
+
+.border-top {
+    border-top: 1px solid var(--gray-200);
+}
+
+.border-bottom {
+    border-bottom: 1px solid var(--gray-200);
+}
+
+.border-left {
+    border-left: 1px solid var(--gray-200);
+}
+
+.border-right {
+    border-right: 1px solid var(--gray-200);
+}
+
+.border-primary {
+    border-color: var(--primary-500);
+}
+
+.border-2 {
+    border-width: 2px;
+}
+
+.rounded {
+    border-radius: var(--radius-md);
+}
+
+.rounded-lg {
+    border-radius: var(--radius-lg);
+}
+
+.rounded-xl {
+    border-radius: var(--radius-xl);
+}
+
+.rounded-full {
+    border-radius: var(--radius-full);
+}
+
+/* ============================================
+   TEXT SIZE UTILITIES
+   ============================================ */
+.text-xs {
+    font-size: var(--text-xs);
+}
+
+.text-sm {
+    font-size: var(--text-sm);
+}
+
+.text-base {
+    font-size: var(--text-base);
+}
+
+.text-lg {
+    font-size: var(--text-lg);
+}
+
+.text-xl {
+    font-size: var(--text-xl);
+}
+
+.text-2xl {
+    font-size: var(--text-2xl);
+}
+
+.text-3xl {
+    font-size: var(--text-3xl);
+}
+
+.text-4xl {
+    font-size: var(--text-4xl);
+}
+
+/* ============================================
+   SHADOW UTILITIES
+   ============================================ */
+.shadow-sm {
+    box-shadow: var(--shadow-sm);
+}
+
+.shadow {
+    box-shadow: var(--shadow-md);
+}
+
+.shadow-lg {
+    box-shadow: var(--shadow-lg);
+}
+
+.shadow-xl {
+    box-shadow: var(--shadow-xl);
+}
+
+.shadow-none {
+    box-shadow: none;
+}
+
+/* ============================================
+   ROW/COLUMN GRID SYSTEM
+   ============================================ */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 calc(var(--space-3) * -1);
+}
+
+.col,
+.col-1,
+.col-2,
+.col-3,
+.col-4,
+.col-5,
+.col-6,
+.col-7,
+.col-8,
+.col-9,
+.col-10,
+.col-11,
+.col-12 {
+    padding: 0 var(--space-3);
+    margin-bottom: var(--space-3);
+}
+
+.col {
+    flex: 1;
+}
+
+.col-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+
+.col-4 {
+    flex: 0 0 33.333333%;
+    max-width: 33.333333%;
+}
+
+.col-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+}
+
+.col-8 {
+    flex: 0 0 66.666667%;
+    max-width: 66.666667%;
+}
+
+.col-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+}
+
+@media (max-width: 768px) {
+    .col-md-12 {
+        flex: 0 0 100%;
+        max-width: 100%;
+    }
+}
+
+.g-3 {
+    gap: var(--space-3);
+}
+
+.g-4 {
+    gap: var(--space-4);
+}
+
+/* ============================================
+   BADGE ENHANCEMENTS
+   ============================================ */
+.badge-success {
+    background: rgba(34, 197, 94, 0.15);
+    color: var(--success-600);
+    border: 1px solid var(--success-200);
+}
+
+.badge-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger-600);
+    border: 1px solid var(--danger-200);
+}
+
+.badge-warning {
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--warning-600);
+    border: 1px solid var(--warning-200);
+}
+
+.badge-info {
+    background: rgba(99, 102, 241, 0.15);
+    color: var(--primary-600);
+    border: 1px solid var(--primary-200);
+}
+
+/* ============================================
+   BUTTON ENHANCEMENTS
+   ============================================ */
+.btn-info {
+    background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+    color: white;
+}
+
+.btn-info:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--warning-500) 0%, var(--warning-600) 100%);
+    color: white;
+}
+
+.btn-warning:hover {
+    box-shadow: var(--shadow-xl);
+    transform: translateY(-2px);
+}
+
+.btn:disabled,
+.btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ============================================
+   CARD REFINEMENTS
+   ============================================ */
+.card-glass {
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+}
+
+.card-glass.p-4 {
+    padding: var(--space-4);
+}
+
+.card-glass.p-6 {
+    padding: var(--space-6);
+}
+
+.card-glass.p-8 {
+    padding: var(--space-8);
+}
+
+/* ============================================
+   HEADING REFINEMENTS
+   ============================================ */
+.h2 {
+    font-size: var(--text-3xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-4);
+}
+
+.h3 {
+    font-size: var(--text-2xl);
+    font-weight: 700;
+    color: var(--gray-900);
+    margin-bottom: var(--space-3);
+}
+
+.h4 {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: var(--space-3);
+}
+
+/* ============================================
+   OVERFLOW UTILITIES
+   ============================================ */
+.overflow-hidden {
+    overflow: hidden;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+/* ============================================
+   DISPLAY UTILITIES
+   ============================================ */
+.d-block {
+    display: block;
+}
+
+.d-inline {
+    display: inline;
+}
+
+.d-inline-block {
+    display: inline-block;
+}
+
+.d-none {
+    display: none;
+}
+
+/* ============================================
+   POSITION UTILITIES
+   ============================================ */
+.position-relative {
+    position: relative;
+}
+
+.position-absolute {
+    position: absolute;
+}
+
+/* ============================================
+   BACKGROUND UTILITIES
+   ============================================ */
+.bg-white {
+    background-color: white;
+}
+
+.bg-gray-50 {
+    background-color: var(--gray-50);
+}
+
+.bg-gray-100 {
+    background-color: var(--gray-100);
+}
+
+.bg-primary {
+    background-color: var(--primary-600);
+}
+
+/* ============================================
+   RESPONSIVE UTILITIES
+   ============================================ */
+@media (max-width: 768px) {
+
+    .container,
+    .container-sm,
+    .container-lg {
+        padding: 0 var(--space-4);
+    }
+
+    h1 {
+        font-size: var(--text-3xl);
+    }
+
+    h2 {
+        font-size: var(--text-2xl);
+    }
+
+    .table tbody td,
+    .table thead th {
+        padding: var(--space-2) var(--space-2);
+        font-size: var(--text-xs);
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+        gap: var(--space-2);
+    }
+
+    .btn-lg {
+        padding: var(--space-3) var(--space-6);
+        font-size: var(--text-base);
+    }
+}

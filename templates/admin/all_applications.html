@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}All Applications{% endblock %}
+{% block content %}
+<div class="container py-6">
+    <h1>All Candidate Applications</h1>
+    <div class="mb-4">
+        <a href="?status=all" class="btn btn-sm {% if status_filter == 'all' %}btn-primary{% else %}btn-outline{% endif %}">All</a>
+        <a href="?status=pending" class="btn btn-sm {% if status_filter == 'pending' %}btn-warning{% else %}btn-outline{% endif %}">Pending</a>
+        <a href="?status=approved" class="btn btn-sm {% if status_filter == 'approved' %}btn-success{% else %}btn-outline{% endif %}">Approved</a>
+        <a href="?status=rejected" class="btn btn-sm {% if status_filter == 'rejected' %}btn-danger{% else %}btn-outline{% endif %}">Rejected</a>
+    </div>
+    <div class="card-glass p-6">
+        {% for app in applications %}
+        <div class="border-bottom p-3">
+            <strong>{{ app.applicant.name }}</strong> for <em>{{ app.election.title }}</em>
+            <span class="badge badge-{{ 'warning' if app.status == 'pending' else ('success' if app.status == 'approved' else 'danger') }}">{{ app.status }}</span>
+        </div>
+        {% else %}
+        <p>No applications found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

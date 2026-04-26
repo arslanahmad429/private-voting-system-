@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Voters - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-6">
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <h1>Manage Voters</h1>
+        <a href="{{ url_for('admin.add_voter') }}" class="btn btn-primary">➕ Add New Voter</a>
+    </div>
+
+    <!-- Search -->
+    <div class="card-glass p-4 mb-4">
+        <form method="GET">
+            <div class="row g-3">
+                <div class="col-md-10">
+                    <input type="text" name="search" class="form-control"
+                        placeholder="Search by name, CNIC, or email..." value="{{ search_query or '' }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-secondary w-100">🔍 Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Voters Table -->
+    <div class="card-glass p-6">
+        <h2 class="h4 mb-4">Registered Voters ({{ voters|length }})</h2>
+        {% if voters %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>CNIC</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Registered</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voter in voters %}
+                    <tr {% if voter.is_deleted %}style="opacity: 0.6; background-color: #fff3cd;" {% endif %}>
+                        <td>{{ voter.name }}</td>
+                        <td>{{ voter.cnic|format_cnic }}</td>
+                        <td>{{ voter.email }}</td>
+                        <td>
+                            {% if voter.is_deleted %}
+                            <span class="badge badge-danger">BANNED</span>
+                            {% else %}
+                            <span class="badge badge-success">Active</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ voter.created_at.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if not voter.is_deleted %}
+                            <a href="{{ url_for('admin.edit_voter', user_id=voter.user_id) }}"
+                                class="btn btn-sm btn-info">Edit</a>
+                            <form method="POST" action="{{ url_for('admin.ban_voter', user_id=voter.user_id) }}"
+                                style="display:inline;"
+                                onsubmit="return confirm('Ban this voter? They will not be able to login.');">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                <button type="submit" class="btn btn-sm btn-warning">Ban</button>
+                            </form>
+                            {% else %}
+                            <form method="POST" action="{{ url_for('admin.unban_voter', user_id=voter.user_id) }}"
+                                style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                <button type="submit" class="btn btn-sm btn-success">Unban</button>
+                            </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray">No voters found{% if search_query %} matching "{{ search_query }}"{% endif %}.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

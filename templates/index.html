@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome - Online Voting System{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="container">
+        <h1 class="hero-title">🗳️ VoteSecure</h1>
+        <p
+            style="font-size: var(--text-xl); color: var(--gray-600); margin-bottom: var(--space-8); max-width: 600px; margin-left: auto; margin-right: auto;">
+            A secure, modern, and transparent online voting platform for conducting elections with confidence
+        </p>
+
+        <div style="display: flex; gap: var(--space-4); justify-content: center; flex-wrap: wrap;">
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary btn-lg">Login</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-outline btn-lg">Register</a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-12">
+    <div class="grid grid-3">
+        <div class="card text-center">
+            <div style="font-size: var(--text-4xl); margin-bottom: var(--space-4);">🔒</div>
+            <h3 class="mb-3">Secure</h3>
+            <p class="text-gray">Advanced security measures including password hashing, session management, and vote
+                encryption</p>
+        </div>
+
+        <div class="card text-center">
+            <div style="font-size: var(--text-4xl); margin-bottom: var(--space-4);">⚡</div>
+            <h3 class="mb-3">Fast</h3>
+            <p class="text-gray">Cast your vote quickly and easily from anywhere with an internet connection</p>
+        </div>
+
+        <div class="card text-center">
+            <div style="font-size: var(--text-4xl); margin-bottom: var(--space-4);">📊</div>
+            <h3 class="mb-3">Transparent</h3>
+            <p class="text-gray">Real-time results and comprehensive analytics available after election closes</p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-12">
+    <div class="card-glass" style="padding: var(--space-12); text-align: center;">
+        <h2 class="mb-6">How It Works</h2>
+        <div class="grid grid-4">
+            <div>
+                <div
+                    style="width: 60px; height: 60px; margin: 0 auto var(--space-4); background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-2xl); font-weight: bold;">
+                    1</div>
+                <h4 class="mb-2">Register</h4>
+                <p class="text-sm text-gray">Create your account with a valid email</p>
+            </div>
+
+            <div>
+                <div
+                    style="width: 60px; height: 60px; margin: 0 auto var(--space-4); background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-2xl); font-weight: bold;">
+                    2</div>
+                <h4 class="mb-2">Browse Elections</h4>
+                <p class="text-sm text-gray">View all available and active elections</p>
+            </div>
+
+            <div>
+                <div
+                    style="width: 60px; height: 60px; margin: 0 auto var(--space-4); background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-2xl); font-weight: bold;">
+                    3</div>
+                <h4 class="mb-2">Cast Vote</h4>
+                <p class="text-sm text-gray">Select your candidate and submit</p>
+            </div>
+
+            <div>
+                <div
+                    style="width: 60px; height: 60px; margin: 0 auto var(--space-4); background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-2xl); font-weight: bold;">
+                    4</div>
+                <h4 class="mb-2">View Results</h4>
+                <p class="text-sm text-gray">See results after election closes</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

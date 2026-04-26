@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Candidates - {{ election.title }}{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <div class="mb-8">
+        <a href="{{ url_for('admin.dashboard') }}" class="text-sm text-primary">← Back to Dashboard</a>
+        <h1 style="margin-top: var(--space-3); margin-bottom: var(--space-2);">Manage Candidates</h1>
+        <p class="text-gray">{{ election.title }}</p>
+    </div>
+
+    <!-- Add Candidate Form -->
+    <div class="card mb-8" style="padding: var(--space-8);">
+        <h2 class="mb-6">Add New Candidate</h2>
+
+        <form method="POST" action="{{ url_for('admin.manage_candidates', election_id=election.election_id) }}"
+            enctype="multipart/form-data">
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="name" class="form-label">Candidate Name</label>
+                    <input type="text" id="name" name="name" class="form-control" placeholder="Full name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="image" class="form-label">Photo (Optional)</label>
+                    <input type="file" id="image" name="image" class="form-control" accept="image/*"
+                        onchange="previewImage(this)">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control"
+                    placeholder="Brief description or bio..." rows="3"></textarea>
+            </div>
+
+            <img id="image-preview"
+                style="display: none; max-width: 200px; margin-top: var(--space-4); border-radius: var(--radius-lg);">
+
+            <button type="submit" class="btn btn-primary mt-4">Add Candidate</button>
+        </form>
+    </div>
+
+    <!-- Existing Candidates -->
+    <div class="card" style="padding: var(--space-8);">
+        <h2 class="mb-6">Current Candidates ({{ candidates|length }})</h2>
+
+        {% if candidates %}
+        <div class="grid grid-3">
+            {% for candidate in candidates %}
+            <div class="card" style="position: relative;">
+                {% if candidate.image_path and candidate.image_path != 'default-candidate.png' %}
+                <img src="{{ url_for('static', filename='images/' + candidate.image_path) }}" alt="{{ candidate.name }}"
+                    style="width: 100%; height: 200px; object-fit: cover; border-radius: var(--radius-lg); margin-bottom: var(--space-4);">
+                {% else %}
+                <div
+                    style="width: 100%; height: 200px; background: var(--gradient-primary); border-radius: var(--radius-lg); display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-5xl); font-weight: bold; margin-bottom: var(--space-4);">
+                    {{ candidate.name[0] }}
+                </div>
+                {% endif %}
+
+                <h3 class="mb-2">{{ candidate.name }}</h3>
+                <p class="text-sm text-gray mb-4">{{ candidate.description or 'No description' }}</p>
+
+                <form method="POST"
+                    action="{{ url_for('admin.delete_candidate', candidate_id=candidate.candidate_id) }}"
+                    onsubmit="return confirmDelete('{{ candidate.name }}')">
+                    <button type="submit" class="btn btn-sm btn-danger" style="width: 100%;">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="text-center" style="padding: var(--space-8);">
+            <p class="text-gray">No candidates added yet. Add your first candidate above!</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

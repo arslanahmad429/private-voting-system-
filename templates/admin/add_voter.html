@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Add Voter - Admin{% endblock %}
+
+{% block content %}
+<div class="container-sm py-6">
+    <div class="card-glass" style="max-width: 600px; margin: 0 auto; padding: var(--space-8);">
+        <h1 class="h2 mb-6">Add New Voter</h1>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="form-group">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" value="{{ name or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cnic" class="form-label">CNIC Number</label>
+                <input type="text" id="cnic" name="cnic" class="form-control" placeholder="12345-6789012-3"
+                    maxlength="15" value="{{ cnic or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" value="{{ email or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control"
+                    placeholder="Minimum 8 characters" required>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary">Add Voter</button>
+                <a href="{{ url_for('admin.manage_voters') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+
+{% block title %}{{ election.title }} - Online Voting System{% endblock %}
+
+{% block extra_css %}
+<style>
+    .candidate-card {
+        cursor: pointer;
+        transition: all var(--transition-base);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .candidate-card input[type="radio"] {
+        position: absolute;
+        opacity: 0;
+    }
+
+    .candidate-card.selected {
+        border: 3px solid var(--primary-500);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2), var(--shadow-2xl);
+        transform: scale(1.02);
+    }
+
+    .candidate-card.selected::after {
+        content: "✓";
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 40px;
+        height: 40px;
+        background: var(--gradient-primary);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--text-xl);
+        font-weight: bold;
+    }
+
+    .candidate-image {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid var(--primary-100);
+        margin: 0 auto var(--space-4);
+        display: block;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <!-- Election Header -->
+    <div class="card-glass mb-8" style="padding: var(--space-8);">
+        <div
+            style="display: flex; justify-content: space-between; align-items: start; flex-wrap: wrap; gap: var(--space-4);">
+            <div>
+                <h1 style="margin-bottom: var(--space-3);">{{ election.title }}</h1>
+                <p class="text-gray" style="max-width: 600px;">{{ election.description }}</p>
+            </div>
+            <span class="badge badge-{{ election.status }}"
+                style="font-size: var(--text-base); padding: var(--space-3) var(--space-6);">
+                {{ election.status }}
+            </span>
+        </div>
+
+        <div style="display: flex; gap: var(--space-8); margin-top: var(--space-6); flex-wrap: wrap;">
+            <div>
+                <p class="text-sm text-gray mb-1">Start Date</p>
+                <p class="fw-semibold">{{ election.start_date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray mb-1">End Date</p>
+                <p class="fw-semibold">{{ election.end_date.strftime('%B %d, %Y at %I:%M %p') }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray mb-1">Total Candidates</p>
+                <p class="fw-semibold">{{ candidates|length }}</p>
+            </div>
+            <div>
+                <p class="text-sm text-gray mb-1">Total Votes</p>
+                <p class="fw-semibold">{{ election.get_total_votes() }}</p>
+            </div>
+        </div>
+    </div>
+
+    {% if has_voted %}
+    <div class="alert alert-success">
+        <h3 style="margin-bottom: var(--space-2);">✓ Thank You for Voting!</h3>
+        <p>Your vote has been recorded successfully. You cannot change your vote once submitted.</p>
+    </div>
+    {% endif %}
+
+    {% if election.status != 'active' %}
+    <div class="alert alert-warning">
+        <h3 style="margin-bottom: var(--space-2);">⚠️ Election Not Active</h3>
+        <p>This election is currently {{ election.status }}. Voting is only available during the active period.</p>
+    </div>
+    {% endif %}
+
+    {% if not is_eligible %}
+    <div class="alert alert-warning">
+        <h3 style="margin-bottom: var(--space-2);">⚠️ Not Eligible to Vote</h3>
+        <p>You are not on the eligible voters list for this election. You can view candidates and results, but cannot
+            vote or apply as a candidate.</p>
+    </div>
+    {% endif %}
+
+    <!-- Candidates -->
+    {% if candidates %}
+    <div class="mb-6">
+        <h2 class="mb-6">Candidates</h2>
+
+        {% if election.status == 'active' and not has_voted and is_eligible %}
+        <form method="POST" action="{{ url_for('voter.cast_vote') }}" id="voteForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+            <input type="hidden" name="election_id" value="{{ election.election_id }}">
+
+            <div class="grid grid-3">
+                {% for candidate in candidates %}
+                <label class="candidate-card card">
+                    <input type="radio" name="candidate_id" value="{{ candidate.candidate_id }}" required>
+
+                    {% if candidate.image_path and candidate.image_path != 'default-candidate.png' %}
+                    <img src="{{ url_for('static', filename='images/' + candidate.image_path) }}"
+                        alt="{{ candidate.name }}" class="candidate-image">
+                    {% else %}
+                    <div class="candidate-image"
+                        style="background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-3xl); font-weight: bold;">
+                        {{ candidate.name[0] }}
+                    </div>
+                    {% endif %}
+
+                    <h3 class="text-center mb-3">{{ candidate.name }}</h3>
+                    <p class="text-sm text-gray text-center">{{ candidate.description or 'No description provided' }}
+                    </p>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div class="text-center mt-8">
+                <button type="submit" class="btn btn-success btn-lg"
+                    onclick="return confirm('Are you sure you want to submit your vote? This action cannot be undone.')">
+                    🗳️ Submit Vote
+                </button>
+            </div>
+        </form>
+        {% else %}
+        <div class="grid grid-3">
+            {% for candidate in candidates %}
+            <div class="card text-center">
+                {% if candidate.image_path and candidate.image_path != 'default-candidate.png' %}
+                <img src="{{ url_for('static', filename='images/' + candidate.image_path) }}" alt="{{ candidate.name }}"
+                    class="candidate-image">
+                {% else %}
+                <div class="candidate-image"
+                    style="background: var(--gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: var(--text-3xl); font-weight: bold;">
+                    {{ candidate.name[0] }}
+                </div>
+                {% endif %}
+
+                <h3 class="mb-3">{{ candidate.name }}</h3>
+                <p class="text-sm text-gray">{{ candidate.description or 'No description provided' }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+    {% else %}
+    <div class="card text-center" style="padding: var(--space-12);">
+        <h3 class="mb-3">No Candidates Yet</h3>
+        <p class="text-gray">Candidates have not been added to this election yet.</p>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-8">
+        <a href="{{ url_for('voter.dashboard') }}" class="btn btn-outline">← Back to Elections</a>
+    </div>
+</div>
+{% endblock %}

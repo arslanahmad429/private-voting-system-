@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Secure Online Voting System - Cast your vote with confidence">
+    <meta name="author" content="Anas Farooq">
+
+    <title>{% block title %}Online Voting System{% endblock %}</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/utilities.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/enhancements.css') }}">
+
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body>
+    <!-- Navigation -->
+    {% if session.user_id %}
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-content">
+                <a href="{% if session.is_admin %}{{ url_for('admin.dashboard') }}{% else %}{{ url_for('voter.dashboard') }}{% endif %}"
+                    class="navbar-brand">
+                    🗳️ VoteSecure
+                </a>
+                <ul class="navbar-nav">
+                    <li><span style="color: var(--gray-600);">Welcome, <strong>{{ session.user_name }}</strong></span>
+                    </li>
+
+                    {% if session.is_admin %}
+                    <li><a href="{{ url_for('admin.dashboard') }}">Dashboard</a></li>
+                    <li><a href="{{ url_for('admin.elections') }}">Elections</a></li>
+                    <li><a href="{{ url_for('admin.manage_voters') }}">Voters</a></li>
+                    <li><a href="{{ url_for('admin.change_password') }}">🔒 Change Password</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('voter.dashboard') }}">My Elections</a></li>
+                    {% endif %}
+
+                    <li><a href="{{ url_for('auth.logout') }}" class="btn btn-sm btn-outline">Logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% endif %}
+
+    <!-- Flash Messages -->
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">
+            {{ message }}
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Main Content -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 Online Voting System | Developed by <strong>Anas Farooq</strong></p>
+            <p class="text-sm" style="margin-top: var(--space-2);">BS Computer Science | Ziauddin University</p>
+            <p class="text-sm" style="color: var(--gray-500); margin-top: var(--space-2);">
+                Secure • Transparent • Reliable
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

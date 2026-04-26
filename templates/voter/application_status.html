@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Application Status{% endblock %}
+{% block content %}
+<div class="container-sm py-6">
+    <div class="card-glass p-8" style="max-width: 600px; margin: 0 auto;">
+        <h1 class="h2 mb-6">Application Status</h1>
+        <div class="alert alert-{{ 'warning' if application.status == 'pending' else ('success' if application.status == 'approved' else 'danger') }}">
+            Status: {{ application.status|upper }}
+        </div>
+        <p><strong>Election:</strong> {{ application.election.title }}</p>
+        <p><strong>Applied:</strong> {{ application.applied_at.strftime('%Y-%m-%d %H:%M') }}</p>
+        <p><strong>Description:</strong></p>
+        <p>{{ application.description }}</p>
+        {% if application.status == 'rejected' %}
+        <div class="alert alert-danger">
+            <strong>Rejection Reason:</strong> {{ application.rejection_reason }}
+        </div>
+        {% endif %}
+        <a href="{{ url_for('voter.dashboard') }}" class="btn btn-primary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

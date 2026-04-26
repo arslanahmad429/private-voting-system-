@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Candidate Portal{% endblock %}
+{% block content %}
+<div class="container py-6">
+    <h1 class="mb-6">Candidate Portal</h1>
+    <div class="card-glass p-6 mb-4">
+        <h2 class="h3">My Candidacies</h2>
+        {% for candidacy in candidacies %}
+        <div class="border-bottom p-3">
+            <h3 class="h5">{{ candidacy.election.title }}</h3>
+            <p class="text-gray">{{ candidacy.description }}</p>
+            {% if candidacy.election.status == 'closed' %}
+            <a href="{{ url_for('candidate.view_results', election_id=candidacy.election_id) }}" class="btn btn-sm btn-success">View Results</a>
+            {% else %}
+            <span class="badge badge-{{ 'success' if candidacy.election.status == 'active' else 'warning' }}">{{ candidacy.election.status }}</span>
+            {% endif %}
+        </div>
+        {% else %}
+        <p class="text-gray">You are not a candidate in any elections yet.</p>
+        {% endfor %}
+    </div>
+    <div class="card-glass p-6">
+        <h2 class="h3">My Applications</h2>
+        {% for app in applications %}
+        <div class="border-bottom p-3">
+            <strong>{{ app.election.title }}</strong>
+            <span class="badge badge-{{ 'warning' if app.status == 'pending' else ('success' if app.status == 'approved' else 'danger') }}">{{ app.status }}</span>
+        </div>
+        {% else %}
+        <p class="text-gray">No applications submitted.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Manage Election Voters{% endblock %}
+{% block content %}
+<div class="container py-6">
+    <h1>Manage Eligible Voters - {{ election.title }}</h1>
+    <p class="text-warning">⚠️ Voter list can only be edited before election starts</p>
+    <form method="POST">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="card-glass p-6">
+            {% for voter in all_voters %}
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="eligible_voters[]" value="{{ voter.user_id }}"
+                       {% if voter.user_id in eligible_voter_ids %}checked{% endif %}>
+                <label class="form-check-label">{{ voter.name }} ({{ voter.cnic|format_cnic }})</label>
+            </div>
+            {% endfor %}
+        </div>
+        <button type="submit" class="btn btn-primary mt-4">Update Eligible Voters</button>
+        <a href="{{ url_for('admin.elections') }}" class="btn btn-secondary mt-4">Cancel</a>
+    </form>
+</div>
+{% endblock %}

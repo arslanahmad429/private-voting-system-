@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Elections - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-6">
+    <div class="d-flex justify-content-between align-items-center mb-6">
+        <h1>Manage Elections</h1>
+        <a href="{{ url_for('admin.create_election') }}" class="btn btn-primary">➕ Create New Election</a>
+    </div>
+
+    <div class="card-glass p-6">
+        {% if elections %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Date Range</th>
+                        <th>Voters</th>
+                        <th>Candidates</th>
+                        <th>Votes</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for election in elections %}
+                    <tr>
+                        <td>{{ election.title }}</td>
+                        <td>
+                            <span
+                                class="badge badge-{% if election.status == 'active' %}success{% elif election.status == 'upcoming' %}warning{% else %}secondary{% endif %}">
+                                {{ election.status|upper }}
+                            </span>
+                        </td>
+                        <td>
+                            <small>
+                                {{ election.start_date.strftime('%Y-%m-%d %H:%M') }}<br>
+                                to {{ election.end_date.strftime('%Y-%m-%d %H:%M') }}
+                            </small>
+                        </td>
+                        <td>{{ election.get_eligible_voter_count() }}</td>
+                        <td>{{ election.candidates|length }}</td>
+                        <td>{{ election.get_total_votes() }}</td>
+                        <td>
+                            <div class="btn-group-vertical btn-group-sm">
+                                {% if election.status == 'upcoming' %}
+                                <a href="{{ url_for('admin.manage_election_voters', election_id=election.election_id) }}"
+                                    class="btn btn-sm btn-info">Voters</a>
+                                <a href="{{ url_for('admin.manage_candidates', election_id=election.election_id) }}"
+                                    class="btn btn-sm btn-info">Candidates</a>
+                                <a href="{{ url_for('admin.edit_election', election_id=election.election_id) }}"
+                                    class="btn btn-sm btn-warning">Edit</a>
+                                {% endif %}
+                                <a href="{{ url_for('admin.view_applications', election_id=election.election_id) }}"
+                                    class="btn btn-sm btn-secondary">Applications</a>
+                                {% if election.status == 'closed' or election.get_total_votes() > 0 %}
+                                <a href="{{ url_for('admin.view_results', election_id=election.election_id) }}"
+                                    class="btn btn-sm btn-success">Results</a>
+                                {% endif %}
+                                {% if election.status == 'upcoming' and election.get_total_votes() == 0 %}
+                                <form method="POST"
+                                    action="{{ url_for('admin.delete_election', election_id=election.election_id) }}"
+                                    style="display:inline;" onsubmit="return confirm('Archive this election?');">
+                                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                    <button type="submit" class="btn btn-sm btn-danger">Archive</button>
+                                </form>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray">No elections created yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

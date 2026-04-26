@@ -1,0 +1,18 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"><style>body { font-family: Calibri, Arial, sans-serif; }table { border-collapse: collapse; width: 100%; margin-bottom: 30px; }th { background-color: #1F4E79; color: white; font-weight: bold; padding: 10px 12px; border: 1px solid #BDD7EE; text-align: left; }td { padding: 8px 12px; border: 1px solid #BDD7EE; }tr:nth-child(even) { background-color: #D6E4F0; }tr:nth-child(odd) { background-color: #FFFFFF; }tr:hover { background-color: #BDD7EE; }h1 { color: #1F4E79; font-size: 22px; margin-top: 30px; margin-bottom: 5px; border-bottom: 2px solid #1F4E79; }h2 { color: #2E75B6; font-size: 13px; font-weight: normal; margin-bottom: 15px; }</style></head><body>
+<h2 style="font-size:16px; color:red;">Report auto-generated at: 2026-04-20 22:16:41</h2>
+<h1>1. Elections Overview</h1>
+<table><thead><tr><th>ID</th><th>Title</th><th>Description</th><th>Status</th><th>Start Date</th><th>End Date</th><th>Eligible Voters</th><th>Total Votes</th></tr></thead><tbody>
+</tbody></table>
+<h1>2. Registered Voters</h1>
+<table><thead><tr><th>ID</th><th>Name</th><th>CNIC</th><th>Email</th><th>Status</th><th>Registered At</th></tr></thead><tbody>
+</tbody></table>
+<h1>3. Approved Candidates</h1>
+<table><thead><tr><th>ID</th><th>Election</th><th>Name</th><th>CNIC</th><th>Description</th><th>Votes Received</th></tr></thead><tbody>
+</tbody></table>
+<h1>4. Candidate Applications</h1>
+<table><thead><tr><th>ID</th><th>Election</th><th>Applicant</th><th>CNIC</th><th>Status</th><th>Applied At</th></tr></thead><tbody>
+</tbody></table>
+<h1>5. Voting Record Log</h1>
+<table><thead><tr><th>Vote ID</th><th>Election</th><th>Voter Name</th><th>Candidate Voted For</th><th>Voted At</th></tr></thead><tbody>
+</tbody></table>
+</body></html>

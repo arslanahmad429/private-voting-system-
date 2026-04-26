@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}All Elections - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <div class="mb-8">
+        <h1 style="margin-bottom: var(--space-2);">All Elections</h1>
+        <p class="text-gray">Manage all system elections</p>
+    </div>
+
+    <div class="mb-6">
+        <a href="{{ url_for('admin.create_election') }}" class="btn btn-primary">➕ Create New Election</a>
+    </div>
+
+    {% if elections %}
+    <div class="grid grid-2">
+        {% for election in elections %}
+        <div class="card">
+            <div
+                style="display: flex; justify-content: space-between; align-items: start; margin-bottom: var(--space-4);">
+                <h3>{{ election.title }}</h3>
+                <span class="badge badge-{{ election.status }}">{{ election.status }}</span>
+            </div>
+
+            <p class="text-sm text-gray mb-4">{{ election.description[:150] }}{% if election.description and
+                election.description|length > 150 %}...{% endif %}</p>
+
+            <div class="mb-4" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3);">
+                <div>
+                    <p class="text-xs text-gray">Candidates</p>
+                    <p class="fw-semibold">{{ election.candidates|length }}</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray">Total Votes</p>
+                    <p class="fw-semibold">{{ election.get_total_votes() }}</p>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-2); flex-wrap: wrap;">
+                <a href="{{ url_for('admin.edit_election', election_id=election.election_id) }}"
+                    class="btn btn-sm btn-outline">
+                    Edit
+                </a>
+                <a href="{{ url_for('admin.manage_candidates', election_id=election.election_id) }}"
+                    class="btn btn-sm btn-primary">
+                    Candidates
+                </a>
+                <a href="{{ url_for('admin.view_results', election_id=election.election_id) }}"
+                    class="btn btn-sm btn-secondary">
+                    Results
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card text-center" style="padding: var(--space-12);">
+        <h3 class="mb-3">No Elections Yet</h3>
+        <p class="text-gray mb-6">Create your first election to get started!</p>
+        <a href="{{ url_for('admin.create_election') }}" class="btn btn-primary">Create Election</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

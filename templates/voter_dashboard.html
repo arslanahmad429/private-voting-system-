@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Voter Dashboard{% endblock %}
+
+{% block content %}
+<div class="container py-6">
+    <div class="mb-6">
+        <h1 class="display-4">Welcome, {{ session.user_name }}!</h1>
+        <p class="lead">CNIC: {{ session.user_cnic|format_cnic }}</p>
+    </div>
+
+    <div class="row g-4">
+        {% if elections %}
+        {% for election in elections %}
+        <div class="col-md-6 col-lg-4">
+            <div class="card-glass p-6 h-100">
+                <div class="d-flex justify-content-between align-items-start mb-3">
+                    <h2 class="h4 mb-0">{{ election.title }}</h2>
+                    <div class="d-flex flex-column gap-2">
+                        <span
+                            class="badge badge-{% if election.status == 'active' %}success{% elif election.status == 'upcoming' %}warning{%else%}secondary{% endif %}">
+                            {{ election.status|upper }}
+                        </span>
+                        {% if election.election_id in eligible_election_ids %}
+                        <span class="badge badge-success">✓ ELIGIBLE</span>
+                        {% else %}
+                        <span class="badge badge-danger">✗ NOT ELIGIBLE</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <p class="text-gray mb-4">{{ election.description[:100] }}...</p>
+
+                <div class="mb-4">
+                    <small class="text-gray d-block">
+                        📅 {{ election.start_date.strftime('%Y-%m-%d %H:%M') }}
+                    </small>
+                    <small class="text-gray d-block">
+                        🏁 {{ election.end_date.strftime('%Y-%m-%d %H:%M') }}
+                    </small>
+                    <small class="text-gray d-block mt-2">
+                        👥 {{ election.candidates|length }} candidates
+                    </small>
+                </div>
+
+                {% if election.election_id in voted_election_ids %}
+                <div class="alert alert-success p-2 mb-3">
+                    ✅ You have voted in this election
+                </div>
+                {% endif %}
+
+                {% if election.election_id in candidacy_election_ids %}
+                <div class="alert alert-info p-2 mb-3">
+                    ℹ️ You are a candidate in this election
+                </div>
+                {% endif %}
+
+                {% if election.election_id in applications %}
+                <div
+                    class="alert alert-{{ 'warning' if applications[election.election_id].status == 'pending' else ('success' if applications[election.election_id].status == 'approved' else 'danger') }} p-2 mb-3">
+                    Application: {{ applications[election.election_id].status|upper }}
+                </div>
+                {% endif %}
+
+                <div class="d-flex gap-2">
+                    <a href="{{ url_for('voter.election_details', election_id=election.election_id) }}"
+                        class="btn btn-primary btn-sm">View Details</a>
+
+                    {% if election.election_id in eligible_election_ids and election.status == 'upcoming' and
+                    election.election_id not in applications and
+                    election.election_id not in candidacy_election_ids %}
+                    <a href="{{ url_for('voter.apply_as_candidate', election_id=election.election_id) }}"
+                        class="btn btn-secondary btn-sm">Apply as Candidate</a>
+                    {% endif %}
+
+                    {% if election.status == 'closed' %}
+                    <a href="{{ url_for('results.view_results', election_id=election.election_id) }}"
+                        class="btn btn-success btn-sm">View Results</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="col-12">
+            <div class="card-glass p-8 text-center">
+                <h2 class="h3 mb-3">No Elections Available</h2>
+                <p class="text-gray">You are not currently eligible to participate in any elections.</p>
+                <p class="text-sm text-gray">Contact an administrator if you believe this is an error.</p>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

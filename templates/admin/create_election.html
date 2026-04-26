@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Create Election - Admin{% endblock %}
+
+{% block content %}
+<div class="container py-6">
+    <div class="card-glass p-8" style="max-width: 900px; margin: 0 auto;">
+        <h1 class="h2 mb-6">Create New Election</h1>
+
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <!-- Basic Info -->
+            <div class="form-group">
+                <label for="title" class="form-label">Election Title</label>
+                <input type="text" id="title" name="title" class="form-control" value="{{ title or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control"
+                    rows="3">{{ description or '' }}</textarea>
+            </div>
+
+            <!-- Dates -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="start_date" class="form-label">Start Date & Time</label>
+                        <input type="datetime-local" id="start_date" name="start_date" class="form-control" required>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="end_date" class="form-label">End Date & Time</label>
+                        <input type="datetime-local" id="end_date" name="end_date" class="form-control" required>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Voter Selection -->
+            <div class="form-group">
+                <label class="form-label">Select Eligible Voters</label>
+                <p class="text-sm text-gray mb-3">Only selected voters will be able to vote and apply as candidates</p>
+
+                <div class="card-glass p-4" style="max-height: 400px; overflow-y: auto;">
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="selectAllVoters()">Select
+                            All</button>
+                        <button type="button" class="btn btn-sm btn-secondary" onclick="deselectAllVoters()">Deselect
+                            All</button>
+                    </div>
+
+                    {% if voters %}
+                    <div class="row g-2">
+                        {% for voter in voters %}
+                        <div class="col-md-6">
+                            <div class="form-check">
+                                <input class="form-check-input voter-checkbox" type="checkbox" name="eligible_voters[]"
+                                    value="{{ voter.user_id }}" id="voter-{{ voter.user_id }}" {% if selected_voter_ids
+                                    and voter.user_id in selected_voter_ids %}checked{% endif %}>
+                                <label class="form-check-label" for="voter-{{ voter.user_id }}">
+                                    {{ voter.name }} <span class="text-gray">({{ voter.cnic|format_cnic }})</span>
+                                </label>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-gray">No voters registered yet. <a href="{{ url_for('admin.add_voter') }}">Add voters
+                            first</a>.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="d-flex gap-3">
+                <button type="submit" class="btn btn-primary btn-lg">Create Election</button>
+                <a href="{{ url_for('admin.elections') }}" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function selectAllVoters() {
+        document.querySelectorAll('.voter-checkbox').forEach(cb => cb.checked = true);
+    }
+    function deselectAllVoters() {
+        document.querySelectorAll('.voter-checkbox').forEach(cb => cb.checked = false);
+    }
+</script>
+{% endblock %}

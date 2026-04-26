@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Online Voting System{% endblock %}
+
+{% block content %}
+<div class="container-sm py-12">
+    <div class="card-glass" style="max-width: 500px; margin: 0 auto; padding: var(--space-10);">
+        <div class="text-center mb-8">
+            <h1 style="font-size: var(--text-4xl); margin-bottom: var(--space-2);">Welcome Back!</h1>
+            <p class="text-gray">Login to access your voting dashboard</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.login') }}" id="loginForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="form-group">
+                <label for="identifier" class="form-label">CNIC or Email</label>
+                <input type="text" id="identifier" name="identifier" class="form-control"
+                    placeholder="Enter your CNIC (12345-6789012-3) or email" value="{{ identifier or '' }}" required>
+                <p class="text-sm text-gray mt-1">
+                    <strong>Voters:</strong> Use your 13-digit CNIC<br>
+                    <strong>Admin:</strong> Use your email address
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control"
+                    placeholder="Enter your password" required>
+            </div>
+
+            <div class="form-group" style="display: flex; align-items: center; gap: var(--space-2);">
+                <input type="checkbox" id="remember" name="remember" value="true">
+                <label for="remember"
+                    style="margin: 0; font-weight: normal; text-transform: none; color: var(--gray-600);">Remember
+                    me</label>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                Login
+            </button>
+        </form>
+
+        <div class="text-center mt-6" style="padding-top: var(--space-6); border-top: 1px solid var(--gray-200);">
+            <p class="text-sm text-gray">
+                <strong>Not a registered voter?</strong><br>
+                Contact your administrator to register.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Voters - Online Voting System{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <div class="mb-8">
+        <h1 style="margin-bottom: var(--space-2);">Manage Voters</h1>
+        <p class="text-gray">View all registered voters</p>
+    </div>
+
+    <div class="card" style="padding: var(--space-8);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-6);">
+            <h2>Registered Voters ({{ voters|length }})</h2>
+
+            <input type="text" id="searchInput" class="form-control" style="max-width: 300px;"
+                placeholder="Search voters..." onkeyup="searchTable('searchInput', 'votersTable')">
+        </div>
+
+        {% if voters %}
+        <div style="overflow-x: auto;">
+            <table id="votersTable" style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="text-align: left; border-bottom: 2px solid var(--gray-200);">
+                        <th style="padding: var(--space-3); font-weight: 600;">Name</th>
+                        <th style="padding: var(--space-3); font-weight: 600;">Email</th>
+                        <th style="padding: var(--space-3); font-weight: 600;">Votes Cast</th>
+                        <th style="padding: var(--space-3); font-weight: 600;">Registered</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for voter in voters %}
+                    <tr style="border-bottom: 1px solid var(--gray-100);">
+                        <td style="padding: var(--space-3); font-weight: 500;">{{ voter.name }}</td>
+                        <td style="padding: var(--space-3); color: var(--gray-600);">{{ voter.email }}</td>
+                        <td style="padding: var(--space-3);">{{ voter.votes|length }}</td>
+                        <td style="padding: var(--space-3); color: var(--gray-600); font-size: var(--text-sm);">
+                            {{ voter.created_at.strftime('%b %d, %Y') }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="text-center" style="padding: var(--space-8);">
+            <p class="text-gray">No voters registered yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

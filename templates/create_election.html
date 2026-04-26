@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Create Election - Online Voting System{% endblock %}
+
+{% block content %}
+<div class="container-sm py-8">
+    <div class="card" style="padding: var(--space-10);">
+        <div class="mb-8">
+            <h1 style="margin-bottom: var(--space-2);">Create New Election</h1>
+            <p class="text-gray">Set up a new election with details and schedule</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('admin.create_election') }}">
+            <div class="form-group">
+                <label for="title" class="form-label">Election Title</label>
+                <input type="text" id="title" name="title" class="form-control"
+                    placeholder="e.g., Student Council Election 2026" value="{{ title or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="description" class="form-label">Description</label>
+                <textarea id="description" name="description" class="form-control"
+                    placeholder="Provide details about this election..." rows="4">{{ description or '' }}</textarea>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label for="start_date" class="form-label">Start Date & Time</label>
+                    <input type="datetime-local" id="start_date" name="start_date" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="end_date" class="form-label">End Date & Time</label>
+                    <input type="datetime-local" id="end_date" name="end_date" class="form-control" required>
+                </div>
+            </div>
+
+            <div style="display: flex; gap: var(--space-4); justify-content: flex-end; margin-top: var(--space-8);">
+                <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">Cancel</a>
+                <button type="submit" class="btn btn-primary">Create Election</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

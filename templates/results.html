@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Results - {{ election.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+    @keyframes confetti {
+        0% {
+            transform: translateY(-100vh) rotate(0deg);
+        }
+
+        100% {
+            transform: translateY(100vh) rotate(720deg);
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-8">
+    <div class="card-glass mb-8" style="padding: var(--space-8);">
+        <div class="text-center mb-6">
+            <h1 style="margin-bottom: var(--space-3);">🏆 Election Results</h1>
+            <h2 class="text-primary">{{ election.title }}</h2>
+            <p class="text-gray mt-3">{{ election.description }}</p>
+        </div>
+
+        <div
+            style="display: flex; justify-content: center; gap: var(--space-12); margin-top: var(--space-8); flex-wrap: wrap;">
+            <div class="text-center">
+                <p class="text-sm text-gray mb-2">Total Votes Cast</p>
+                <p class="fw-bold" style="font-size: var(--text-3xl); color: var(--primary-600);">{{ total_votes }}</p>
+            </div>
+            <div class="text-center">
+                <p class="text-sm text-gray mb-2">Total Candidates</p>
+                <p class="fw-bold" style="font-size: var(--text-3xl); color: var(--secondary-600);">{{ results|length }}
+                </p>
+            </div>
+            <div class="text-center">
+                <p class="text-sm text-gray mb-2">Election Status</p>
+                <span class="badge badge-{{ election.status }}"
+                    style="font-size: var(--text-base); padding: var(--space-2) var(--space-4);">
+                    {{ election.status }}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    {% if results %}
+    <!-- Winner Card -->
+    {% if total_votes > 0 %}
+    <div class="card mb-8"
+        style="background: var(--gradient-primary); color: white; padding: var(--space-10); text-align: center; position: relative; overflow: hidden;">
+        <div style="font-size: var(--text-5xl); margin-bottom: var(--space-4);">🎉</div>
+        <h2 class="mb-4" style="color: white;">Winner: {{ results[0].candidate.name }}</h2>
+        <p style="font-size: var(--text-2xl); opacity: 0.9;">{{ results[0].votes }} votes ({{
+            "%.1f"|format(results[0].percentage) }}%)</p>
+    </div>
+    {% endif %}
+
+    <!-- All Results -->
+    <div class="card" style="padding: var(--space-8);">
+        <h2 class="mb-6">Complete Results</h2>
+
+        <div style="display: flex; flex-direction: column; gap: var(--space-6);">
+            {% for result in results %}
+            <div>
+                {% set pct = result.percentage %}
+                {% set pct_formatted = "%.1f"|format(pct) %}
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-3);">
+                    <div style="display: flex; align-items: center; gap: var(--space-4);">
+                        <div
+                            style="width: 50px; height: 50px; background: var(--gradient-primary); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: var(--text-xl);">
+                            #{{ loop.index }}
+                        </div>
+                        <div>
+                            <h3 class="mb-1">{{ result.candidate.name }}</h3>
+                            <p class="text-sm text-gray">{{ result.candidate.description or 'No description' }}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="fw-bold" style="font-size: var(--text-2xl); color: var(--primary-600);">{{
+                            result.votes }}</p>
+                        <p class="text-sm text-gray">votes</p>
+                    </div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" data-width="{{ pct }}" style="width: {{ pct }}%;">
+                        {{ pct_formatted }}%
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if total_votes == 0 %}
+    <div class="alert alert-info mt-6">
+        <p><strong>ℹ️ No votes cast yet</strong></p>
+        <p>Results will appear here once voters start casting their votes.</p>
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="card text-center" style="padding: var(--space-12);">
+        <h3 class="mb-3">No Candidates</h3>
+        <p class="text-gray">This election has no candidates yet.</p>
+    </div>
+    {% endif %}
+
+    <div class="text-center mt-8">
+        {% if session.is_admin %}
+        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline">← Back to Dashboard</a>
+        {% else %}
+        <a href="{{ url_for('voter.dashboard') }}" class="btn btn-outline">← Back to Elections</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Animate progress bars on page load
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(animateResults, 500);
+    });
+</script>
+{% endblock %}

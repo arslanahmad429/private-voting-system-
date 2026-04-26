@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Manage Candidates{% endblock %}
+{% block content %}
+<div class="container py-6">
+    <h1>Manage Candidates - {{ election.title }}</h1>
+    <div class="card-glass p-6 mb-4">
+        <h2 class="h4">Current Candidates ({{ candidates|length }})</h2>
+        {% for candidate in candidates %}
+        <div class="d-flex justify-content-between align-items-center p-3 border-bottom">
+            <div>
+                <strong>{{ candidate.name }}</strong> ({{ candidate.cnic|format_cnic }})
+                <br><small class="text-gray">{{ candidate.description }}</small>
+            </div>
+            {% if election.status == 'upcoming' %}
+            <form method="POST" action="{{ url_for('admin.delete_candidate', candidate_id=candidate.candidate_id) }}" style="display:inline;">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+            </form>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% if election.status == 'upcoming' %}
+    <div class="card-glass p-6">
+        <h2 class="h4">Add Candidate Manually</h2>
+        <form method="POST">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+            <div class="form-group">
+                <select name="user_id" class="form-control" required>
+                    <option value="">Select Voter...</option>
+                    {% for voter in eligible_voters %}
+                    <option value="{{ voter.user_id }}">{{ voter.name }} ({{ voter.cnic|format_cnic }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <textarea name="description" class="form-control" placeholder="Candidate description..." required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary">Add Candidate</button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

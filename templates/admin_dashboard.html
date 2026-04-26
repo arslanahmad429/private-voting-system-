@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+
+{% block title %}Admin Dashboard - Voting System{% endblock %}
+
+{% block content %}
+<div class="container py-6">
+    <div class="mb-8">
+        <h1 class="display-4">Admin Dashboard</h1>
+        <p class="lead">Manage elections, voters, and applications</p>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row g-4 mb-6">
+        <div class="col-md-3">
+            <div class="card-glass p-4">
+                <h3 class="h1 mb-2">{{ total_elections }}</h3>
+                <p class="text-gray mb-0">Total Elections</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-glass p-4">
+                <h3 class="h1 mb-2">{{ active_elections }}</h3>
+                <p class="text-gray mb-0">Active Elections</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-glass p-4">
+                <h3 class="h1 mb-2">{{ total_voters }}</h3>
+                <p class="text-gray mb-0">Registered Voters</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card-glass p-4">
+                <h3 class="h1 mb-2 text-warning">{{ pending_applications }}</h3>
+                <p class="text-gray mb-0">Pending Applications</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card-glass p-6 mb-6">
+        <h2 class="h3 mb-4">Quick Actions</h2>
+        <div class="d-flex gap-3 flex-wrap">
+            <a href="{{ url_for('admin.create_election') }}" class="btn btn-primary">
+                ➕ Create Election
+            </a>
+            <a href="{{ url_for('admin.add_voter') }}" class="btn btn-secondary">
+                👥 Add Voter
+            </a>
+            <a href="{{ url_for('admin.view_all_applications') }}" class="btn btn-warning">
+                📝 View Applications ({{ pending_applications }})
+            </a>
+            <a href="{{ url_for('admin.manage_voters') }}" class="btn btn-info">
+                🔍 Manage Voters
+            </a>
+        </div>
+    </div>
+
+    <!-- Recent Elections -->
+    <div class="card-glass p-6 mb-6">
+        <h2 class="h3 mb-4">Recent Elections</h2>
+        {% if recent_elections %}
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Start Date</th>
+                        <th>Eligible Voters</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for election in recent_elections %}
+                    <tr>
+                        <td>{{ election.title }}</td>
+                        <td>
+                            <span class="badge badge-{{ 'success' if election.status == 'active' else 'secondary' }}">
+                                {{ election.status|upper }}
+                            </span>
+                        </td>
+                        <td>{{ election.start_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>{{ election.get_eligible_voter_count() }} voters</td>
+                        <td>
+                            <a href="{{ url_for('admin.view_applications', election_id=election.election_id) }}"
+                                class="btn btn-sm btn-outline">View</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-gray">No elections created yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Pending Applications -->
+    {% if recent_applications %}
+    <div class="card-glass p-6">
+        <h2 class="h3 mb-4">Pending Applications</h2>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Applicant</th>
+                        <th>CNIC</th>
+                        <th>Election</th>
+                        <th>Applied At</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for app in recent_applications %}
+                    <tr>
+                        <td>{{ app.applicant.name }}</td>
+                        <td>{{ app.applicant.cnic|format_cnic }}</td>
+                        <td>{{ app.election.title }}</td>
+                        <td>{{ app.applied_at.strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <form method="POST"
+                                action="{{ url_for('admin.approve_application', application_id=app.application_id) }}"
+                                style="display:inline;">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+                                <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                            <button type="button" class="btn btn-sm btn-danger"
+                                onclick="rejectApplication({{ app.application_id }})">Reject</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+    function rejectApplication(appId) {
+        const reason = prompt('Enter rejection reason:');
+        if (reason) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/admin/applications/' + appId + '/reject';
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = 'csrf_token';
+            csrfInput.value = '{{ csrf_token() }}';
+
+            const reasonInput = document.createElement('input');
+            reasonInput.type = 'hidden';
+            reasonInput.name = 'reason';
+            reasonInput.value = reason;
+
+            form.appendChild(csrfInput);
+            form.appendChild(reasonInput);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    }
+</script>
+{% endblock %}

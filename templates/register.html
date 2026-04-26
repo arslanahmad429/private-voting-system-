@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Online Voting System{% endblock %}
+
+{% block content %}
+<div class="container-sm py-12">
+    <div class="card-glass" style="max-width: 500px; margin: 0 auto; padding: var(--space-10);">
+        <div class="text-center mb-8">
+            <h1 style="font-size: var(--text-4xl); margin-bottom: var(--space-2);">Create Account</h1>
+            <p class="text-gray">Join our secure voting platform</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.register') }}" id="registerForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" />
+
+            <div class="form-group">
+                <label for="name" class="form-label">Full Name</label>
+                <input type="text" id="name" name="name" class="form-control" placeholder="John Doe"
+                    value="{{ name or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="cnic" class="form-label">CNIC Number</label>
+                <input type="text" id="cnic" name="cnic" class="form-control" placeholder="12345-6789012-3"
+                    maxlength="15" value="{{ cnic or '' }}" required>
+                <p class="text-sm text-gray mt-1">13-digit CNIC (with or without dashes)</p>
+            </div>
+
+            <div class="form-group">
+                <label for="email" class="form-label">Email Address</label>
+                <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com"
+                    value="{{ email or '' }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" name="password" class="form-control"
+                    placeholder="Create a strong password" oninput="updatePasswordStrength()" required>
+                <div class="progress mt-2">
+                    <div class="progress-bar" id="password-strength" style="width: 0%;">Weak</div>
+                </div>
+                <p class="text-sm text-gray mt-2">Must include: 8+ chars, uppercase, lowercase, number</p>
+            </div>
+
+            <div class="form-group">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" class="form-control"
+                    placeholder="Re-enter your password" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+                Create Account
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <p class="text-gray">Already have an account? <a href="{{ url_for('auth.login') }}"
+                    class="fw-semibold">Login here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
