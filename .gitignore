@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C compilation artifacts
+*.o
+*.obj
+*.exe
+
+# Databases & Backups
+*.db
+*.sqlite
+*.sqlite3
+instance/
+backups/
+logs/
+
+# Environment variables
+.env
+.env.*
+*.env
+smtp_config.txt
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# IDE & System
+.vscode/
+.idea/
+.DS_Store
